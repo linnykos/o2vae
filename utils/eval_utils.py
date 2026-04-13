@@ -14,7 +14,7 @@ def grid_from_2cols(
     x2,
     nrow=10,
     ncol=8,
-    grid_kwargs={"padding": 2, "pad_value": 0.5, "align_corners": False},
+    grid_kwargs={"padding": 2, "pad_value": 0.5},
 ):
     """
     Given 2 tensors of images x1, x2, put them in a single imagegrid (by

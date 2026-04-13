@@ -68,6 +68,9 @@ def loss_reconstruction_fourier_batch(x, y, recon_loss_type="bce", mask=None):
     yf_out = torch.nn.functional.grid_sample(yf, grid_f, align_corners=True)
 
     # compute the loss for flip and no flip separately
+    # clamp to [0,1] to guard against interpolation artefacts from grid_sample
+    y_out = y_out.clamp(0, 1)
+    yf_out = yf_out.clamp(0, 1)
     loss_r = loss_func(y_out, x, reduction="none").view(bs, -1).sum(1)
     loss_f = loss_func(yf_out, x, reduction="none").view(bs, -1).sum(1)
     if mask is not None:

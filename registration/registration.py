@@ -115,7 +115,12 @@ class PolarTranformBatch:
 
         # Pre-filtering not necessary for order 0, 1 interpolation
         self.prefilter = order > 1
-        self.ndi_mode = skimage._shared.utils._to_ndimage_mode(self.mode_padding_ndimage)
+        # _to_ndimage_mode was a private skimage helper removed in v0.20; replicate it here
+        _mode_map = dict(constant="constant", edge="nearest",
+                         symmetric="reflect", reflect="mirror", wrap="wrap")
+        if self.mode_padding_ndimage not in _mode_map:
+            raise ValueError(f"Unknown pad mode: {self.mode_padding_ndimage}")
+        self.ndi_mode = _mode_map[self.mode_padding_ndimage]
 
     def warp_single_ndimage(self, x):
         """
