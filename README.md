@@ -4,12 +4,62 @@
 
 This repo contains source code and demos for our paper ["Orientation-invariant autoencoders learn robust representations for shape profiling of cells and organelles"](https://www.nature.com/articles/s41467-024-45362-4). 
 
+> **Note:** This is a fork of [jmhb0/o2vae](https://github.com/jmhb0/o2vae) with compatibility fixes applied to support newer package versions. See the original repo for the paper authors and citation.
+
 ## Contents
+- [Installation](#installation)
 - [Background and Method](#method)
 - [What's in this repo](#contents)
 - [Usage - learning representations](#usage1)
 - [Usage - using representation for analysis](#usage2)
 - [Citation](#citation)
+
+## <a name="installation"/> Installation
+
+These instructions are written for a Linux server environment (e.g. a university HPC cluster). Tested on Ubuntu 20.04 with Python 3.9.
+
+**Step 1 — Create and activate a conda environment**
+```bash
+conda create --name o2vae python=3.9
+conda activate o2vae
+```
+
+**Step 2 — Install dependencies**
+```bash
+pip install -r requirements.txt
+```
+
+**Step 3 — Install PyTorch**
+
+PyTorch must be installed separately to match your server's CUDA version. Go to [pytorch.org](https://pytorch.org/) and select your OS, package manager, and CUDA version to get the right command. For example, for CUDA 11.8:
+```bash
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cu118
+```
+
+**Step 4 — Install wandb (for logging and model saving)**
+```bash
+pip install wandb
+```
+
+### Dependency table
+
+| Package | Version | Install |
+|---|---|---|
+| Python | 3.9 | `conda create --name o2vae python=3.9` |
+| torch | match your CUDA | see [pytorch.org](https://pytorch.org/) |
+| torchvision | match your CUDA | see [pytorch.org](https://pytorch.org/) |
+| e2cnn | 0.2.1 | `pip install e2cnn==0.2.1` |
+| glasbey | 0.2.0 | `pip install glasbey==0.2.0` |
+| matplotlib | 3.6 | `pip install matplotlib==3.6` |
+| numpy | >=1.22, <1.24 | `pip install "numpy>=1.22,<1.24"` |
+| scikit-image | >=0.19, <0.20 | `pip install "scikit-image>=0.19,<0.20"` |
+| seaborn | 0.12.1 | `pip install seaborn==0.12.1` |
+| torchgeometry | 0.1.2 | `pip install torchgeometry==0.1.2` |
+| tqdm | 4.61.2 | `pip install tqdm==4.61.2` |
+| umap-learn | 0.5.2 | `pip install umap-learn==0.5.2` |
+| wandb | any recent | `pip install wandb` |
+
+> **Why are numpy and scikit-image version-bounded?** `e2cnn` uses dtype aliases (`np.bool`, `np.float`, etc.) that were removed in NumPy 1.24. `scikit-image` moved a private internal function in v0.20 that this codebase calls directly. These bounds keep the environment compatible.
 
 ## <a name="method"/> Background and method
 In phenotypic profiling for cell biology, we want to map images of centered cells or organelles to a vector of numbers (a profile / representation / embedding / feature). We then use those vectors for analyses like clustering, classification, outlier detection, dimensionality reduction, and visualization:
