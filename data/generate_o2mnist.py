@@ -24,8 +24,10 @@ except Exception as e:
     print("pass an existing data directory argument: `python generate_o2mnist.py /path/to/data_dir`")
     raise ValueError(e)
     """
-data_dir = os.path.dirname(os.path.realpath(__file__))
-data_dir = os.path.join(data_dir, "o2_mnist")
+if len(sys.argv) > 1:
+    data_dir = sys.argv[1]
+else:
+    data_dir = "/gscratch/kzlinlab/projects/microglia3d/out/o2vae_kevin"
 print(f"O2-mnist data dir: {data_dir}")
 
 torch.manual_seed(0)
