@@ -15,7 +15,7 @@
 # ── Paths ──
 DATA_DIR="/gscratch/kzlinlab/projects/microglia3d/out/o2vae_kevin"
 OUT_DIR="/gscratch/kzlinlab/projects/microglia3d/out/o2vae_kevin"
-REPO_DIR="/gscratch/kzlinlab/projects/microglia3d/git/o2vae"
+REPO_DIR="/gscratch/kzlinlab/projects/microglia3d/git/o2vae_kevin"
 SIF="/gscratch/kzlinlab/containers/microglia3d.sif"
 
 # ── Setup ──
