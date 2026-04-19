@@ -15,6 +15,7 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 
 import torch
+import torchvision.transforms as T
 import train_loops
 import run
 from configs.config_o2mnist import config
@@ -30,6 +31,14 @@ args = parser.parse_args()
 
 # Override config paths
 config.data.data_dir = args.data_dir
+
+# RandomRotation uses bilinear interpolation which can push pixels slightly
+# outside [0,1], causing BCE loss to assert. Clamp after augmentation.
+config.data.transform_train = T.Compose([
+    T.RandomRotation(180),
+    T.RandomVerticalFlip(0.5),
+    T.Lambda(lambda x: x.clamp(0.0, 1.0)),
+])
 if args.epochs is not None:
     config.run.epochs = args.epochs
 
