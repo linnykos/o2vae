@@ -16,29 +16,33 @@
 DATA_DIR="/gscratch/kzlinlab/projects/microglia3d/out/o2vae_kevin"
 OUT_DIR="/gscratch/kzlinlab/projects/microglia3d/out/o2vae_kevin"
 REPO_DIR="/gscratch/kzlinlab/projects/microglia3d/git/o2vae_kevin"
-SIF="/gscratch/kzlinlab/containers/microglia3d.sif"
+SIF="/gscratch/kzlinlab/containers/o2vae.sif"
+CONDA_ENV="o2vae"
 
 # ── Setup ──
 mkdir -p "${OUT_DIR}"
 module load singularity
 cd "${REPO_DIR}"
 
+run_in_container() {
+    singularity exec --nv --bind /gscratch "${SIF}" \
+        bash -c "source /opt/conda/etc/profile.d/conda.sh && conda activate ${CONDA_ENV} && $*"
+}
+
 # Step 1: generate the O2-MNIST dataset (skip if already done)
 if [ ! -f "${DATA_DIR}/X_train.sav" ]; then
     echo "Generating O2-MNIST dataset..."
-    time -p singularity run --nv --bind /gscratch "${SIF}" \
-        python data/generate_o2mnist.py "${DATA_DIR}"
+    time -p run_in_container python data/generate_o2mnist.py "${DATA_DIR}"
 else
     echo "Dataset already exists, skipping generation."
 fi
 
 # Step 2: train the model
 echo "Starting training..."
-time -p singularity run --nv --bind /gscratch "${SIF}" \
-    python examples/train_o2mnist_hyak.py \
-        --data-dir "${DATA_DIR}" \
-        --out-dir  "${OUT_DIR}" \
-        --epochs 41
+time -p run_in_container python examples/train_o2mnist_hyak.py \
+    --data-dir "${DATA_DIR}" \
+    --out-dir  "${OUT_DIR}" \
+    --epochs 41
 
 touch "${OUT_DIR}/job_finished.flag"
 echo "Done."
