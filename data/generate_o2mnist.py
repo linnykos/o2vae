@@ -23,7 +23,7 @@ try:
 except Exception as e:
     print("pass an existing data directory argument: `python generate_o2mnist.py /path/to/data_dir`")
     raise ValueError(e)
-    """
+"""
 if len(sys.argv) > 1:
     data_dir = sys.argv[1]
 else:
