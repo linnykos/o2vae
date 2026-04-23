@@ -77,6 +77,7 @@ for i in range(10):
     grid = eval_utils.reconstruction_grid(model, xs, align=False, ncol=2)
     axs[i].imshow(grid)
     axs[i].set_axis_off()
+
 save(f, "orientation_invariance.png")
 
 # --- Extract embeddings ---
