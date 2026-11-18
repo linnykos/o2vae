@@ -96,3 +96,8 @@ venv/
 *.ckpt
 *.pt
 *.pth
+
+# Inverted pipeline outputs (keep source scripts in Git)
+/data/writeup6_image62_8colors_inverted/
+/examples/writeup6_image62_inverted_results/
+/wandb/offline-run-*/
